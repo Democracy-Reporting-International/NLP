@@ -4,8 +4,11 @@ Welcome to the NLP section of the DRI Digital Democracy GitHub repository! Here 
 Social media platforms generate an immense amount of textual data that can be analyzed using NLP techniques to extract meaningful insights. The scripts in this repository help you perform various NLP tasks on social media data, including:
 
 Sentiment analysis text data.
+
 Topic modeling to uncover hidden themes in the data.
+
 Using LLMs (such as the ChatGPT API) to summarise text data.
+
 
 # Best Practice
 
