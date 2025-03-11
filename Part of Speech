@@ -1,0 +1,34 @@
+import pandas as pd
+import spacy
+
+def perform_pos(file_path, text_column="TEXT_COLUMN"):
+    # Load the English NLP model from spaCy
+    nlp = spacy.load("en_core_web_sm")
+    
+    # Read the Excel file into a Pandas DataFrame
+    df = pd.read_excel(file_path)
+    
+    # Ensure the text column exists
+    if text_column not in df.columns:
+        raise ValueError(f"Column '{text_column}' not found in the dataset")
+    
+    # Function to extract part of speech tags from text
+    def extract_pos(text):
+        if pd.isna(text):
+            return []  # Handle missing values
+        doc = nlp(text)
+        return [(token.text, token.pos_) for token in doc]
+    
+    # Apply POS tagging to the text column
+    df['Part_of_Speech'] = df[text_column].astype(str).apply(extract_pos)
+    
+    return df
+
+# Example usage
+if __name__ == "__main__":
+    input_file = "data.xlsx"  # Change this to your actual file path
+    df_with_entities = perform_ner(input_file)
+    print(df_with_entities[['TEXT_COLUMN', 'Named_Entities']].head())
+    
+    df_with_pos = perform_pos(input_file)
+    print(df_with_pos[['TEXT_COLUMN', 'Part_of_Speech']].head())
