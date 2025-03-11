@@ -1,0 +1,29 @@
+import pandas as pd
+import spacy
+from detoxify import Detoxify
+
+def perform_toxicity_analysis(file_path, text_column="TEXT_COLUMN"):
+    # Read the Excel file into a Pandas DataFrame
+    df = pd.read_excel(file_path)
+    
+    # Ensure the text column exists
+    if text_column not in df.columns:
+        raise ValueError(f"Column '{text_column}' not found in the dataset")
+    
+    # Function to get toxicity scores
+    def get_toxicity_score(text):
+        if pd.isna(text):
+            return None  # Handle missing values
+        return Detoxify("original").predict(text)["toxicity"]
+    
+    # Apply toxicity analysis to the text column
+    df['Toxicity_Score'] = df[text_column].astype(str).apply(get_toxicity_score)
+    
+    return df
+
+# Example usage
+if __name__ == "__main__":
+    input_file = "data.xlsx"  # Change this to your actual file path
+    
+    df_with_toxicity = perform_toxicity_analysis(input_file)
+    print(df_with_toxicity[['TEXT_COLUMN', 'Toxicity_Score']].head())
